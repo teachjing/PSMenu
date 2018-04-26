@@ -23,8 +23,8 @@ function DrawMenu {
 					$item = '[ ] ' + $item
 				}
 			}
-            #pad the text to ensure no artifacts when scrolling list
-            $menuText = $item.PadRight($ww - ($item.Length + 2), ' ');
+            		#pad the text to ensure no artifacts when scrolling list
+            		$menuText = $item.PadRight($ww - ($item.Length + 2), ' ');
 			if ($idx -eq $menuPosition) {
 				Write-Host "> $menuText" -ForegroundColor Green
 			} else {
@@ -83,7 +83,6 @@ function Menu {
 			if ($pos -lt 0) {$pos = 0}
 			If ($vkeycode -eq 27) {$pos = $null }
 			if ($pos -ge $menuItems.length) {$pos = $menuItems.length -1}
-			#dg
 			if($commands.Count -ne 0) {
 				foreach($key in $cmdHash.keys) {
 					If ($press.Character -eq $key) { 
@@ -97,7 +96,6 @@ function Menu {
 					}
 				}
 			}
-			#/dg
 			if ($vkeycode -ne 27)
 			{
 				[System.Console]::SetCursorPosition(0,$cur_pos)

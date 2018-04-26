@@ -23,8 +23,11 @@ Install-Module PS-Menu
 
 * Returns value of selected menu item
 * Returns index of selected menu item (using `-ReturnIndex` switch)
+* Returns an array of items (using `-MultiSelect` switch)
+* Display an array of commands with list items (using `-commands` param)
 * Navigation with `up/down` arrows
 * Navigation with `j/k` (vim style)
+* Longer list scroll within window
 * Esc key quits the menu (`null` value returned)
 
 # Contributing
