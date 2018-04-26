@@ -87,11 +87,7 @@ function Menu {
 				foreach($key in $cmdHash.keys) {
 					If ($press.Character -eq $key) { 
 						$val = $cmdHash[$key];
-						if($Multiselect) {
-							$cmd = $val;
-						} else {
-							$cmd = $val
-						}
+						$cmd = $val;
 						break; 
 					}
 				}
