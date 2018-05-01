@@ -54,36 +54,36 @@ function Menu {
     param ([array]$menuItems, [switch]$ReturnIndex=$false, [switch]$Multiselect, [array]$commands)
     $vkeycode = 0
     $pos = 0
-	$cmd = ''
-	$cmdHash = @{} 
-	if($commands.Count -ne 0) {
-		#$commands| Foreach-Object { $cmdHash[$_[0]] = $_ }
-		for($i = 0; $commands.Count -1; $i++){
-			$c = $commands[$i];
-			if($c -eq $null){
-				break;
-			}		
-			$k = $c[0];
-			$cmdHash[$k] = $c;
-			$commands[$i] = '[' + $k + ']' + $c.Substring(1);		
-		}
+    $cmd = ''
+    $cmdHash = @{}
+    $cmdText = @(0) * $commands.Count
+    if ($commands.Count -ne 0) {
+    	for ($i = 0; $commands.Count -1; $i++){
+		$c = $commands[$i];
+		if ($c -eq $null){
+			break;
+		}		
+		$k = $c[0];
+		$cmdHash[$k] = $c;
+		$cmdText[$i] = '[' + $k + ']' + $c.Substring(1);		
 	}
+    }
     $selection = @()
     $cur_pos = [System.Console]::CursorTop
     [console]::CursorVisible=$false #prevents cursor flickering
     if ($menuItems.Length -gt 0)
 	{
-        DrawMenu $menuItems $pos $Multiselect $selection $commands
+        DrawMenu $menuItems $pos $Multiselect $selection $cmdText
 		While ($vkeycode -ne 13 -and $vkeycode -ne 27 -and $cmd -eq '') {
 			$press = $host.ui.rawui.readkey("NoEcho,IncludeKeyDown")
 			$vkeycode = $press.virtualkeycode
 			If ($vkeycode -eq 38 -or $press.Character -eq 'k') {$pos--}
 			If ($vkeycode -eq 40 -or $press.Character -eq 'j') {$pos++}			
 			If ($press.Character -eq ' ') { $selection = Toggle-Selection $pos $selection }
-			if ($pos -lt 0) {$pos = 0}
+			If ($pos -lt 0) {$pos = 0}
 			If ($vkeycode -eq 27) {$pos = $null }
-			if ($pos -ge $menuItems.length) {$pos = $menuItems.length -1}
-			if($commands.Count -ne 0) {
+			If ($pos -ge $menuItems.length) {$pos = $menuItems.length -1}
+			If ($commands.Count -ne 0) {
 				foreach($key in $cmdHash.keys) {
 					If ($press.Character -eq $key) { 
 						$val = $cmdHash[$key];
@@ -92,10 +92,10 @@ function Menu {
 					}
 				}
 			}
-			if ($vkeycode -ne 27)
+			If ($vkeycode -ne 27)
 			{
 				[System.Console]::SetCursorPosition(0,$cur_pos)
-				DrawMenu $menuItems $pos $Multiselect $selection $commands
+				DrawMenu $menuItems $pos $Multiselect $selection $cmdText
 			}
 		}
 	}
