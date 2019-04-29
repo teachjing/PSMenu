@@ -51,7 +51,9 @@ function Toggle-Selection {
 }
 
 function Show-Menu {
-    param ([array]$menuItems, [switch]$ReturnIndex = $false, [switch]$Multiselect, [array]$commands)
+    [CmdletBinding()]
+    Param ([Parameter(Mandatory, Position = 0)][Array]$MenuItems, [Switch]$ReturnIndex, [Switch]$MultiSelect, [Array]$Commands)
+
     $vkeycode = 0
     $pos = 0
     $cmd = ''
