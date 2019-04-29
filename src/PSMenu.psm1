@@ -132,3 +132,6 @@ function get-SelectedValue {
         return $value;
     }
 }
+
+# Exports
+Export-ModuleMember -Function Show-Menu
