@@ -41,22 +41,13 @@ function Show-Menu {
                 }
 
                 $CurrentPress = Read-VKey
-
                 $VKeyCode = $CurrentPress.VirtualKeyCode
-
-                If (Test-KeyUp $VKeyCode) { 
-                    $Position--
-                }
-
-                If (Test-KeyDown $VKeyCode) {
-                    $Position++
-                }
 
                 If (Test-KeySpace $VKeyCode) {
                     $CurrentSelection = Toggle-Selection $Position $CurrentSelection
                 }
 
-                $Position = Get-WrappedPosition $MenuItems $Position
+                $Position = Get-PositionWithVKey -MenuItems $MenuItems -Position $Position -VKeyCode $VKeyCode
 
                 If (!$(Test-KeyEscape $VKeyCode)) {
                     [System.Console]::SetCursorPosition(0, $CursorPosition)
