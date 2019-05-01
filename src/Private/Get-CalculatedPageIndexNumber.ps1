@@ -26,7 +26,7 @@ function Get-CalculatedPageIndexNumber(
     }
 
     if ($BottomIndex) {
-        Return $TopIndexNumber + $WindowHeight
+        Return $TopIndexNumber + [Math]::Min($MenuItemCount, $WindowHeight) - 1
     }
 
     Throw 'Invalid option combination'

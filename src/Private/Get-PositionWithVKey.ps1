@@ -1,4 +1,8 @@
 function Get-PositionWithVKey([Array]$MenuItems, [int]$Position, $VKeyCode) {
+    $MinPosition = 0
+    $MaxPosition = $MenuItems.Count - 1
+    $WindowHeight = Get-ConsoleHeight
+
     If (Test-KeyUp $VKeyCode) { 
         $Position--
     }
@@ -8,7 +12,7 @@ function Get-PositionWithVKey([Array]$MenuItems, [int]$Position, $VKeyCode) {
     }
 
     If (Test-KeyPageDown $VKeyCode) {
-        $Position = $MenuItems.Count - 1
+        $Position = [Math]::Min($MaxPosition, $Position + $WindowHeight)
     }
 
     If (Test-KeyEnd $VKeyCode) {
@@ -16,11 +20,11 @@ function Get-PositionWithVKey([Array]$MenuItems, [int]$Position, $VKeyCode) {
     }
 
     IF (Test-KeyPageUp $VKeyCode) {
-        $Position = 0
+        $Position = [Math]::Max($MinPosition, $Position - $WindowHeight)
     }
 
     IF (Test-KeyHome $VKeyCode) {
-        $Position = 0
+        $Position = $MinPosition
     }
 
     $Position = Get-WrappedPosition $MenuItems $Position
