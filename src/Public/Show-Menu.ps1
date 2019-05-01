@@ -17,13 +17,14 @@ function Show-Menu {
     $CursorPosition = [System.Console]::CursorTop
     
     try {
-        [System.Console]::CursorVisible = $false #prevents cursor flickering
+        [System.Console]::CursorVisible = $false # Prevents cursor flickering
 
         # Body
         $WriteMenu = { 
             Write-Menu -MenuItems $MenuItems `
                 -MenuPosition $Position `
                 -MultiSelect:$MultiSelect `
+                -CurrentSelection:$CurrentSelection `
                 -ItemFocusColor $ItemFocusColor `
                 -MenuItemFormatter $MenuItemFormatter
         }

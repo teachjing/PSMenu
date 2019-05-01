@@ -1,5 +1,5 @@
 function Toggle-Selection {
-    param ($Position, [array]$CurrentSelection)
+    param ($Position, [Array]$CurrentSelection)
     if ($CurrentSelection -contains $Position) { 
         $result = $CurrentSelection | where { $_ -ne $Position }
     }

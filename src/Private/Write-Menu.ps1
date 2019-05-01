@@ -12,11 +12,11 @@ function Write-MenuItem(
 
 function Write-Menu {
     param (
-        [array] $MenuItems, 
+        [Array] $MenuItems, 
         $MenuPosition,
         [Switch] $MultiSelect, 
-        $CurrentSelection, 
-        [array]$Commands, 
+        [Array]$CurrentSelection, 
+        [Array]$Commands, 
         [ConsoleColor] $ItemFocusColor,
         [ScriptBlock] $MenuItemFormatter)
     $MenuItemCount = $MenuItems.length
