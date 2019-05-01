@@ -88,8 +88,8 @@ function Test-MenuWithClassOptions() {
     Write-Host ""
 }
 
-function Test-ScrollingMenu() {
-    $ItemsToGenerate = [Console]::WindowHeight + 5
+function Test-ScrollingMenu([int]$SurplusItems = 5) {
+    $ItemsToGenerate = [Console]::WindowHeight + $SurplusItems
 
     Write-Host "Generating $ItemsToGenerate menu items"
     $MenuItems = Get-TestMenuItemsByCount -Count $ItemsToGenerate
