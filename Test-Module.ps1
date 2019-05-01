@@ -1,10 +1,17 @@
-param([Switch]$NoNewShell)
+param([Switch]$NoNewShell, [Switch]$SmokeTest)
 
 $MyPath = $PSScriptRoot
 
 if ($NoNewShell -eq $false) {
     Write-Host "Opening new shell..."
-    & powershell @("-NoExit", "-File", "$MyPath\Test-Module.ps1", "-NoNewShell")
+
+    $PsArgs = @("-NoExit", "-File", "$MyPath\Test-Module.ps1", "-NoNewShell")
+
+    if ($SmokeTest) {
+        $PsArgs += @("-SmokeTest")
+    }
+
+    & powershell $PsArgs
     Exit $LASTEXITCODE
 }
 
@@ -59,4 +66,17 @@ function Test-MenuWithClassOptions() {
     Write-Host ""
     $Chosen.Execute()
     Write-Host ""
+}
+
+function Test-MenuWithCustomFormatter() {
+    Show-Menu -MenuItems $(Get-NetAdapter) -MenuItemFormatter { Param($M) $M.Name }
+}
+
+if ($SmokeTest) {
+    Write-Host "Test-MenuWithClassOptions" -ForegroundColor Cyan
+    Test-MenuWithClassOptions
+
+    Write-Host "Test-MenuWithCustomFormatter" -ForegroundColor Cyan
+    Test-MenuWithCustomFormatter
+    Exit 0
 }
