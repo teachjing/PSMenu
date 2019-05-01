@@ -14,7 +14,7 @@ Custom formatting of menu items:
 Show-Menu -MenuItems $(Get-NetAdapter) -MenuItemFormatter { Param($M) $M.Name }
 ```
 
-You can also use custom (enriched options), for instance:
+You can also use custom options (enriched options). A more complicated example:
 
 ```powershell
 class MyMenuOption {
@@ -57,14 +57,14 @@ Install-Module PSMenu
 
 - Returns value of selected menu item
 - Returns index of selected menu item (using `-ReturnIndex` switch)
-- Returns an array of items (using `-MultiSelect` switch)
+- Multi-selection support (using `-MultiSelect` switch), use `spacebar` to select items
 - Navigation with `up/down/page-up/page-down/home/end` keys
 - Longer list scroll within window
 - Esc key quits the menu (`$null` returned)
 
 # Contributing
 
-- Source hosted at [GitHub][repo]
-- Report issues/questions/feature requests on [GitHub Issues][issues]
+- Source hosted at [GitHub](https://github.com/Sebazzz/PSMenu)
+- Report issues/questions/feature requests on [GitHub Issues](https://github.com/Sebazzz/PSMenu/issues)
 
 Pull requests are very welcome!
