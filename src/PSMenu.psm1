@@ -1,38 +1,60 @@
-function DrawMenu {
-    param ([array]$MenuItems, $MenuPosition, $MultiSelect, $CurrentSelection, [array]$Commands)
-    $l = $MenuItems.length
-    $wh = (Get-Host).UI.RawUI.WindowSize.Height - 2;
-    $ww = (Get-Host).UI.RawUI.WindowSize.Width;
-    $idx = 0;
+function Format-MenuItem(
+    [Parameter(Mandatory)] $MenuItem, 
+    [Switch] $MultiSelect, 
+    [Parameter(Mandatory)][bool] $IsItemSelected, 
+    [Parameter(Mandatory)][bool] $IsItemFocused) {
+    $SelectionPrefix = ''
+    if ($MultiSelect) {
+        $SelectionPrefix = if ($SelectionPrefix) { '[x] ' } else { '[ ] ' }
+    }
 
-    if ($l -gt $wh) {
-        $l = $wh;
-        if ($MenuPosition -gt $l) {
-            $idx = $MenuPosition - $l;
+    $WindowWidth = (Get-Host).UI.RawUI.WindowSize.Width
+    $ItemText = $MenuItem.ToString().PadRight($WindowWidth - ($Item.Length + 2), ' ')
+    $FocusPrefix = if ($IsItemFocused) { '> ' } else { '  ' }
+
+    $Text = "{0}{1}{2}" -f $FocusPrefix, $SelectionPrefix, $ItemText
+
+    Return $Text
+}
+
+function Write-MenuItem(
+    [Parameter(Mandatory)][String] $MenuItem,
+    [Switch]$IsFocused,
+    [ConsoleColor]$FocusColor) {
+    if ($IsFocused) {
+        Write-Host $MenuItem -ForegroundColor $FocusColor
+    }
+    else {
+        Write-Host $MenuItem
+    }
+}
+
+function Write-Menu {
+    param ([array]$MenuItems, $MenuPosition, $MultiSelect, $CurrentSelection, [array]$Commands, [ConsoleColor]$ItemFocusColor)
+    $MenuItemCount = $MenuItems.length
+    $WindowHeight = (Get-Host).UI.RawUI.WindowSize.Height - 2;
+
+    $CurrentIndex = 0;
+
+    if ($MenuItemCount -gt $WindowHeight) {
+        $MenuItemCount = $WindowHeight;
+        if ($MenuPosition -gt $MenuItemCount) {
+            $CurrentIndex = $MenuPosition - $MenuItemCount;
         }
     }
-    for ($i = 0; $i -le $l; $i++) {
-        if ($MenuItems[$idx] -ne $null) {
-            $Item = $MenuItems[$idx].ToString()
-            if ($MultiSelect) {
-                if ($CurrentSelection -contains $idx) {
-                    $Item = '[x] ' + $Item
-                }
-                else {
-                    $Item = '[ ] ' + $Item
-                }
-            }
-            #pad the text to ensure no artifacts when scrolling list
-            $MenuText = $Item.PadRight($ww - ($Item.Length + 2), ' ');
-            if ($idx -eq $MenuPosition) {
-                Write-Host "> $MenuText" -ForegroundColor Green
-            }
-            else {
-                Write-Host "  $MenuText"
-            }
+
+    for ($i = 0; $i -le $MenuItemCount; $i++) {
+        if ($MenuItems[$CurrentIndex] -ne $null) {
+            $MenuItemStr = $MenuItems[$CurrentIndex].ToString()
+            $IsItemSelected = $CurrentSelection -contains $CurrentIndex
+            $IsItemFocused = $CurrentIndex -eq $MenuPosition
+
+            $DisplayText = Format-MenuItem -MenuItem $MenuItemStr -MultiSelect:$MultiSelect -IsItemSelected:$IsItemSelected -IsItemFocused:$IsItemFocused
+            Write-MenuItem -MenuItem $DisplayText -IsFocused:$IsItemFocused -FocusColor $ItemFocusColor
         }
-        $idx++;
+        $CurrentIndex++;
     }
+
     if ($Commands.Count -ne 0) {
         Write-Host ($Commands -join ", ")
     }
@@ -52,7 +74,13 @@ function Toggle-Selection {
 
 function Show-Menu {
     [CmdletBinding()]
-    Param ([Parameter(Mandatory, Position = 0)][Array]$MenuItems, [Switch]$ReturnIndex, [Switch]$MultiSelect, [Array]$Commands)
+    Param (
+        [Parameter(Mandatory, Position = 0)][Array] $MenuItems,
+        [Switch]$ReturnIndex, 
+        [Switch]$MultiSelect, 
+        [ConsoleColor] $ItemFocusColor = [ConsoleColor]::Green,
+        [Array]$Commands
+    )
 
     if ($Host.Name -ine "ConsoleHost") {
         Throw "This host is $($Host.Name) and does not support an interactive menu."
@@ -77,8 +105,9 @@ function Show-Menu {
     $CurrentSelection = @()
     $CursorPosition = [System.Console]::CursorTop
     [console]::CursorVisible = $false #prevents cursor flickering
+    
     if ($MenuItems.Length -gt 0) {
-        DrawMenu $MenuItems $Position $MultiSelect $CurrentSelection $CommandText
+        Write-Menu $MenuItems $Position $MultiSelect $CurrentSelection $CommandText $ItemFocusColor
         While ($VKeyCode -ne 13 -and $VKeyCode -ne 27 -and $Command -eq '') {
             $CurrentPress = $host.ui.rawui.readkey("NoEcho,IncludeKeyDown")
             $VKeyCode = $CurrentPress.virtualkeycode
@@ -99,7 +128,7 @@ function Show-Menu {
             }
             If ($VKeyCode -ne 27) {
                 [System.Console]::SetCursorPosition(0, $CursorPosition)
-                DrawMenu $MenuItems $Position $MultiSelect $CurrentSelection $CommandText
+                Write-Menu $MenuItems $Position $MultiSelect $CurrentSelection $CommandText $ItemFocusColor
             }
         }
     }
