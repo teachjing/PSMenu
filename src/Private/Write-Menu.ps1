@@ -20,17 +20,8 @@ function Write-Menu {
         [Switch] $MultiSelect
     )
     
-    $MenuItemCount = $MenuItems.Count
-    $WindowHeight = Get-ConsoleHeight
-
-    $CurrentIndex = 0;
-
-    if ($MenuItemCount -gt $WindowHeight) {
-        $MenuItemCount = $WindowHeight;
-        if ($MenuPosition -gt $MenuItemCount) {
-            $CurrentIndex = $MenuPosition - $MenuItemCount;
-        }
-    }
+    $CurrentIndex = Get-CalculatedPageIndexNumber -MenuItems $MenuItems -MenuPosition $MenuPosition -TopIndex
+    $MenuItemCount = Get-CalculatedPageIndexNumber -MenuItems $MenuItems -MenuPosition $MenuPosition -ItemCount
 
     for ($i = 0; $i -le $MenuItemCount; $i++) {
         if ($null -eq $MenuItems[$CurrentIndex]) {
@@ -49,9 +40,5 @@ function Write-Menu {
         Write-MenuItem -MenuItem $DisplayText -IsFocused:$IsItemFocused -FocusColor $ItemFocusColor
 
         $CurrentIndex++;
-    }
-
-    if ($Commands.Count -ne 0) {
-        Write-Host ($Commands -join ", ")
     }
 }
