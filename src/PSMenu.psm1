@@ -1,51 +1,51 @@
 function DrawMenu {
-    param ([array]$menuItems, $menuPosition, $Multiselect, $selection, [array]$commands)
-    $l = $menuItems.length
+    param ([array]$MenuItems, $MenuPosition, $MultiSelect, $CurrentSelection, [array]$Commands)
+    $l = $MenuItems.length
     $wh = (Get-Host).UI.RawUI.WindowSize.Height - 2;
     $ww = (Get-Host).UI.RawUI.WindowSize.Width;
     $idx = 0;
 
     if ($l -gt $wh) {
         $l = $wh;
-        if ($menuPosition -gt $l) {
-            $idx = $menuPosition - $l;
+        if ($MenuPosition -gt $l) {
+            $idx = $MenuPosition - $l;
         }
     }
     for ($i = 0; $i -le $l; $i++) {
-        if ($menuItems[$idx] -ne $null) {
-            $item = $menuItems[$idx].ToString()
-            if ($Multiselect) {
-                if ($selection -contains $idx) {
-                    $item = '[x] ' + $item
+        if ($MenuItems[$idx] -ne $null) {
+            $Item = $MenuItems[$idx].ToString()
+            if ($MultiSelect) {
+                if ($CurrentSelection -contains $idx) {
+                    $Item = '[x] ' + $Item
                 }
                 else {
-                    $item = '[ ] ' + $item
+                    $Item = '[ ] ' + $Item
                 }
             }
             #pad the text to ensure no artifacts when scrolling list
-            $menuText = $item.PadRight($ww - ($item.Length + 2), ' ');
-            if ($idx -eq $menuPosition) {
-                Write-Host "> $menuText" -ForegroundColor Green
+            $MenuText = $Item.PadRight($ww - ($Item.Length + 2), ' ');
+            if ($idx -eq $MenuPosition) {
+                Write-Host "> $MenuText" -ForegroundColor Green
             }
             else {
-                Write-Host "  $menuText"
+                Write-Host "  $MenuText"
             }
         }
         $idx++;
     }
-    if ($commands.Count -ne 0) {
-        Write-Host ($commands -join ", ")
+    if ($Commands.Count -ne 0) {
+        Write-Host ($Commands -join ", ")
     }
 }
 
 function Toggle-Selection {
-    param ($pos, [array]$selection)
-    if ($selection -contains $pos) { 
-        $result = $selection | where { $_ -ne $pos }
+    param ($Position, [array]$CurrentSelection)
+    if ($CurrentSelection -contains $Position) { 
+        $result = $CurrentSelection | where { $_ -ne $Position }
     }
     else {
-        $selection += $pos
-        $result = $selection
+        $CurrentSelection += $Position
+        $result = $CurrentSelection
     }
     $result
 }
@@ -58,82 +58,82 @@ function Show-Menu {
         Throw "This host is $($Host.Name) and does not support an interactive menu."
     }
 
-    $vkeycode = 0
-    $pos = 0
-    $cmd = ''
-    $cmdHash = @{ }
-    $cmdText = @(0) * $commands.Count
-    if ($commands.Count -ne 0) {
-        for ($i = 0; $commands.Count - 1; $i++) {
-            $c = $commands[$i];
+    $VKeyCode = 0
+    $Position = 0
+    $Command = ''
+    $CommandHash = @{ }
+    $CommandText = @(0) * $Commands.Count
+    if ($Commands.Count -ne 0) {
+        for ($i = 0; $Commands.Count - 1; $i++) {
+            $c = $Commands[$i];
             if ($c -eq $null) {
                 break;
             }		
             $k = $c[0];
-            $cmdHash[$k] = $c;
-            $cmdText[$i] = '[' + $k + ']' + $c.Substring(1);		
+            $CommandHash[$k] = $c;
+            $CommandText[$i] = '[' + $k + ']' + $c.Substring(1);		
         }
     }
-    $selection = @()
-    $cur_pos = [System.Console]::CursorTop
+    $CurrentSelection = @()
+    $CursorPosition = [System.Console]::CursorTop
     [console]::CursorVisible = $false #prevents cursor flickering
-    if ($menuItems.Length -gt 0) {
-        DrawMenu $menuItems $pos $Multiselect $selection $cmdText
-        While ($vkeycode -ne 13 -and $vkeycode -ne 27 -and $cmd -eq '') {
-            $press = $host.ui.rawui.readkey("NoEcho,IncludeKeyDown")
-            $vkeycode = $press.virtualkeycode
-            If ($vkeycode -eq 38 -or $press.Character -eq 'k') { $pos-- }
-            If ($vkeycode -eq 40 -or $press.Character -eq 'j') { $pos++ }			
-            If ($press.Character -eq ' ') { $selection = Toggle-Selection $pos $selection }
-            If ($pos -lt 0) { $pos = 0 }
-            If ($vkeycode -eq 27) { $pos = $null }
-            If ($pos -ge $menuItems.length) { $pos = $menuItems.length - 1 }
-            If ($commands.Count -ne 0) {
-                foreach ($key in $cmdHash.keys) {
-                    If ($press.Character -eq $key) { 
-                        $val = $cmdHash[$key];
-                        $cmd = $val;
+    if ($MenuItems.Length -gt 0) {
+        DrawMenu $MenuItems $Position $MultiSelect $CurrentSelection $CommandText
+        While ($VKeyCode -ne 13 -and $VKeyCode -ne 27 -and $Command -eq '') {
+            $CurrentPress = $host.ui.rawui.readkey("NoEcho,IncludeKeyDown")
+            $VKeyCode = $CurrentPress.virtualkeycode
+            If ($VKeyCode -eq 38 -or $CurrentPress.Character -eq 'k') { $Position-- }
+            If ($VKeyCode -eq 40 -or $CurrentPress.Character -eq 'j') { $Position++ }			
+            If ($CurrentPress.Character -eq ' ') { $CurrentSelection = Toggle-Selection $Position $CurrentSelection }
+            If ($Position -lt 0) { $Position = 0 }
+            If ($VKeyCode -eq 27) { $Position = $null }
+            If ($Position -ge $MenuItems.length) { $Position = $MenuItems.length - 1 }
+            If ($Commands.Count -ne 0) {
+                foreach ($key in $CommandHash.keys) {
+                    If ($CurrentPress.Character -eq $key) { 
+                        $val = $CommandHash[$key];
+                        $Command = $val;
                         break; 
                     }
                 }
             }
-            If ($vkeycode -ne 27) {
-                [System.Console]::SetCursorPosition(0, $cur_pos)
-                DrawMenu $menuItems $pos $Multiselect $selection $cmdText
+            If ($VKeyCode -ne 27) {
+                [System.Console]::SetCursorPosition(0, $CursorPosition)
+                DrawMenu $MenuItems $Position $MultiSelect $CurrentSelection $CommandText
             }
         }
     }
     else {
-        $pos = $null
+        $Position = $null
     }
     [console]::CursorVisible = $true
 
-    if ($ReturnIndex -eq $false -and $pos -ne $null) {
-        if ($Multiselect) {
-            return get-SelectedValue -cmd $cmd -value $menuItems[$selection]
+    if ($ReturnIndex -eq $false -and $Position -ne $null) {
+        if ($MultiSelect) {
+            Return Get-CurrentSelectedValue -Command $Command -Value $MenuItems[$CurrentSelection]
 			
         }
         else {
-            return get-SelectedValue -cmd $cmd -value $menuItems[$pos]
+            Return Get-CurrentSelectedValue -Command $Command -Value $MenuItems[$Position]
         }
     }
     else {
-        if ($Multiselect) {
-            return get-SelectedValue -cmd $cmd -value $selection
+        if ($MultiSelect) {
+            Return Get-CurrentSelectedValue -Command $Command -Value $CurrentSelection
         }
         else {
-            return get-SelectedValue -cmd $cmd -value $pos
+            Return Get-CurrentSelectedValue -Command $Command -Value $Position
         }
     }
 }
 
-function get-SelectedValue {
-    Param($cmd, $value)
-    if ($cmd -ne '') {
-        return @($cmd, @($value));
+function Get-CurrentSelectedValue {
+    Param($Command, $Value)
+    if ($Command -ne '') {
+        Return @($Command, @($Value));
     }
     else {
-        return $value;
+        Return $Value;
     }
 }
 
