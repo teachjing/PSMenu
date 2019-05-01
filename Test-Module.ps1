@@ -8,6 +8,7 @@ if ($NoNewShell -eq $false) {
     Exit $LASTEXITCODE
 }
 
+Clear-Host
 Import-Module .\src\PSMenu.psm1 -Verbose
 
 function Test-MenuWithStringOptions() {
