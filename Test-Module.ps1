@@ -30,7 +30,7 @@ if ($NoNewShell -eq $false) {
 }
 
 Clear-Host
-Import-Module .\src\PSMenu.psm1 -Verbose
+Import-Module .\src\PSMenu\PSMenu.psm1 -Verbose
 
 function Test-MenuWithStringOptions() {
     $Opts = @(

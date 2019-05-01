@@ -24,6 +24,7 @@ Task Default -Depends Test
 Task Init {
     $lines
     Set-Location $ProjectRoot
+
     "Build System Details:"
     Get-Item ENV:BH*
     "`n"
@@ -36,7 +37,7 @@ Task Test -Depends Init {
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
     # Gather test results. Store them in a variable and file
-    $TestResults = Invoke-Pester -Path $ProjectRoot\src -PassThru -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile"
+    $TestResults = Invoke-Pester -Path $ProjectRoot\PSMenu -PassThru -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile"
 
     # In Appveyor?  Upload our tests! #Abstract this into a function?
     If ($ENV:BHBuildSystem -eq 'AppVeyor') {
@@ -60,7 +61,7 @@ Task Build -Depends Test {
     $lines
     
     # Load the module, read the exported functions, update the psd1 FunctionsToExport
-    Set-ModuleFunctions -Path .\src\PSMenu.psm1
+    Set-ModuleFunctions
 
     # Bump the module version if we didn't already
     Try {

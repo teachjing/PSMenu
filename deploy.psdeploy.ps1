@@ -20,7 +20,7 @@
 # Publish to gallery with a few restrictions
 if (
     $env:BHModulePath -and
-    $env:BHBuildSystem -ne 'Unknown' -and
+    ($env:BHBuildSystem -ne 'Unknown' -or $ENV:NuGetApiKey) -and
     $env:BHBranchName -eq "master" -and
     $env:BHCommitMessage -match '!deploy'
 ) {
@@ -29,7 +29,7 @@ if (
             FromSource $ENV:BHModulePath
             To PSGallery
             WithOptions @{
-                ApiKey = $ENV:NugetApiKey
+                ApiKey = $ENV:NuGetApiKey
             }
         }
     }
