@@ -8,6 +8,37 @@ Simple module to generate interactive console menus (like yeoman)
 Show-Menu @("option 1", "option 2", "option 3")
 ```
 
+You can also use custom (enriched options), for instance:
+
+```
+class MyMenuOption {
+    [String]$DisplayName
+    [ScriptBlock]$Script
+
+    [String]ToString() {
+        Return $This.DisplayName
+    }
+}
+
+function New-MenuItem([String]$DisplayName, [ScriptBlock]$Script) {
+    $MenuItem = [MyMenuOption]::new()
+    $MenuItem.DisplayName = $DisplayName
+    $MenuItem.Script = $Script
+    Return $MenuItem
+}
+
+$Opts = @(
+    $(New-MenuItem -DisplayName "Say Hello" -Script { Write-Host "Hello!" }),
+    $(New-MenuItem -DisplayName "Say Bye!" -Script { Write-Host "Bye!" })
+)
+
+$Chosen = Show-Menu -MenuItems $Opts
+
+& $Chosen.Script
+```
+
+This will show the menu items like you expect.
+
 # Installation
 
 You can install it from the PowerShellGallery using PowerShellGet

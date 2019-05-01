@@ -13,7 +13,7 @@ function DrawMenu {
     }
     for ($i = 0; $i -le $l; $i++) {
         if ($menuItems[$idx] -ne $null) {
-            $item = $menuItems[$idx]
+            $item = $menuItems[$idx].ToString()
             if ($Multiselect) {
                 if ($selection -contains $idx) {
                     $item = '[x] ' + $item
