@@ -1,16 +1,30 @@
-param([Switch]$NoNewShell, [Switch]$SmokeTest)
+param([Switch]$NoNewShell, [Switch]$SmokeTest, [String]$EncCmd, [ScriptBlock] $AutoExec, [Switch]$Exit)
 
 $MyPath = $PSScriptRoot
 
 if ($NoNewShell -eq $false) {
     Write-Host "Opening new shell..."
 
-    $PsArgs = @("-NoExit", "-File", "$MyPath\Test-Module.ps1", "-NoNewShell")
+    [string[]]$PsArgs = @()
+    
+    if (!$Exit) {
+        $PsArgs += @("-NoExit")
+    }
+
+    $PsArgs += @("-File", "$MyPath\Test-Module.ps1", "-NoNewShell")
 
     if ($SmokeTest) {
         $PsArgs += @("-SmokeTest")
     }
 
+    if ($AutoExec) {
+        $EncCmd = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($AutoExec.ToString()))
+        $PsArgs += @("-EncCmd", $EncCmd)
+    }
+
+    
+
+    Write-Host "powershell $PsArgs"
     & powershell $PsArgs
     Exit $LASTEXITCODE
 }
@@ -57,6 +71,12 @@ function Get-TestMenuItems() {
     )
 }
 
+function Get-TestMenuItemsByCount($Count) {
+    for ($Index = 1; $Index -le $Count; $Index++) {
+        New-MenuItem -DisplayName "Test Menuitem $Index" -ExecuteCallback { Write-Host "This was #$Index" }.GetNewClosure()
+    }
+}
+
 function Test-MenuWithClassOptions() {
     $Opts = Get-TestMenuItems
 
@@ -66,6 +86,15 @@ function Test-MenuWithClassOptions() {
     Write-Host ""
     $Chosen.Execute()
     Write-Host ""
+}
+
+function Test-ScrollingMenu() {
+    $ItemsToGenerate = [Console]::WindowHeight + 5
+
+    Write-Host "Generating $ItemsToGenerate menu items"
+    $MenuItems = Get-TestMenuItemsByCount -Count $ItemsToGenerate
+
+    Show-Menu -MenuItems $MenuItems
 }
 
 function Test-MenuWithCustomFormatter() {
@@ -79,4 +108,11 @@ if ($SmokeTest) {
     Write-Host "Test-MenuWithCustomFormatter" -ForegroundColor Cyan
     Test-MenuWithCustomFormatter
     Exit 0
+}
+
+if ($EncCmd) {
+    $Cmd = [System.Text.Encoding]::Unicode.GetString([Convert]::FromBase64String($EncCmd))
+
+    Write-Host "Executing: $Cmd"
+    Invoke-Expression -Command $Cmd
 }
