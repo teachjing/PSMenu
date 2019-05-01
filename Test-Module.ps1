@@ -88,13 +88,13 @@ function Test-MenuWithClassOptions() {
     Write-Host ""
 }
 
-function Test-ScrollingMenu([int]$SurplusItems = 5) {
+function Test-ScrollingMenu([int]$SurplusItems = 5, [Switch]$MultiSelect) {
     $ItemsToGenerate = [Console]::WindowHeight + $SurplusItems
 
     Write-Host "Generating $ItemsToGenerate menu items"
     $MenuItems = Get-TestMenuItemsByCount -Count $ItemsToGenerate
 
-    Show-Menu -MenuItems $MenuItems
+    Show-Menu -MenuItems $MenuItems -MultiSelect:$MultiSelect
 }
 
 function Test-MenuWithCustomFormatter() {
