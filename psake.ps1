@@ -19,7 +19,7 @@ Properties {
     
 }
 
-Task Default -Depends Build
+Task Default -Depends Test
 
 Task Init {
     $lines
