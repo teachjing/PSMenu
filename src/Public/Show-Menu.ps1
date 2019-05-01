@@ -29,34 +29,29 @@ function Show-Menu {
                 -MenuItemFormatter $MenuItemFormatter
         }
 
-        if ($MenuItems.Length -gt 0) {
-            & $WriteMenu
-            While ($True) {
-                If (Test-KeyEscape $VKeyCode) {
-                    Return $null
-                }
-
-                if (Test-KeyEnter $VKeyCode) {
-                    Break
-                }
-
-                $CurrentPress = Read-VKey
-                $VKeyCode = $CurrentPress.VirtualKeyCode
-
-                If (Test-KeySpace $VKeyCode) {
-                    $CurrentSelection = Toggle-Selection $Position $CurrentSelection
-                }
-
-                $Position = Get-PositionWithVKey -MenuItems $MenuItems -Position $Position -VKeyCode $VKeyCode
-
-                If (!$(Test-KeyEscape $VKeyCode)) {
-                    [System.Console]::SetCursorPosition(0, $CursorPosition)
-                    & $WriteMenu
-                }
+        & $WriteMenu
+        While ($True) {
+            If (Test-KeyEscape $VKeyCode) {
+                Return $null
             }
-        }
-        else {
-            $Position = $null
+
+            if (Test-KeyEnter $VKeyCode) {
+                Break
+            }
+
+            $CurrentPress = Read-VKey
+            $VKeyCode = $CurrentPress.VirtualKeyCode
+
+            If (Test-KeySpace $VKeyCode) {
+                $CurrentSelection = Toggle-Selection $Position $CurrentSelection
+            }
+
+            $Position = Get-PositionWithVKey -MenuItems $MenuItems -Position $Position -VKeyCode $VKeyCode
+
+            If (!$(Test-KeyEscape $VKeyCode)) {
+                [System.Console]::SetCursorPosition(0, $CursorPosition)
+                & $WriteMenu
+            }
         }
     }
     finally {

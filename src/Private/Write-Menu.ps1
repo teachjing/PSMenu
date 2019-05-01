@@ -12,15 +12,16 @@ function Write-MenuItem(
 
 function Write-Menu {
     param (
-        [Array] $MenuItems, 
-        $MenuPosition,
-        [Switch] $MultiSelect, 
-        [Array]$CurrentSelection, 
-        [Array]$Commands, 
-        [ConsoleColor] $ItemFocusColor,
-        [ScriptBlock] $MenuItemFormatter)
-    $MenuItemCount = $MenuItems.length
-    $WindowHeight = (Get-Host).UI.RawUI.WindowSize.Height - 2;
+        [Parameter(Mandatory)][Array] $MenuItems, 
+        [Parameter(Mandatory)][Int] $MenuPosition,
+        [Parameter()][Array] $CurrentSelection, 
+        [Parameter(Mandatory)][ConsoleColor] $ItemFocusColor,
+        [Parameter(Mandatory)][ScriptBlock] $MenuItemFormatter,
+        [Switch] $MultiSelect
+    )
+    
+    $MenuItemCount = $MenuItems.Count
+    $WindowHeight = Get-ConsoleHeight
 
     $CurrentIndex = 0;
 
