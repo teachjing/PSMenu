@@ -27,7 +27,15 @@
     Copyright         = '(c) 2018 Damsteen.nl'
 
     # Description of the functionality provided by this module
-    Description       = 'Powershell module to generate interactive console menu'
+    Description       = 'Powershell module to generate interactive console menu.
+    
+    Supports:
+    - Multiselection
+    - Paging
+    - Objects
+    - Custom rendering
+    
+    Check for examples on how to use it on Github!'
 
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion = '4.0'
