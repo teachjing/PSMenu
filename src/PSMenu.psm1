@@ -54,6 +54,10 @@ function Show-Menu {
     [CmdletBinding()]
     Param ([Parameter(Mandatory, Position = 0)][Array]$MenuItems, [Switch]$ReturnIndex, [Switch]$MultiSelect, [Array]$Commands)
 
+    if ($Host.Name -ine "ConsoleHost") {
+        Throw "This host is $($Host.Name) and does not support an interactive menu."
+    }
+
     $vkeycode = 0
     $pos = 0
     $cmd = ''
