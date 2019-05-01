@@ -8,9 +8,15 @@ Simple module to generate interactive console menus (like yeoman)
 Show-Menu @("option 1", "option 2", "option 3")
 ```
 
+Custom formatting of menu items:
+
+```powershell
+Show-Menu -MenuItems $(Get-NetAdapter) -MenuItemFormatter { Param($M) $M.Name }
+```
+
 You can also use custom (enriched options), for instance:
 
-```
+```powershell
 class MyMenuOption {
     [String]$DisplayName
     [ScriptBlock]$Script

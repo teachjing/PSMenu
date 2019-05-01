@@ -43,11 +43,15 @@ function New-MenuItem([String]$DisplayName, [ScriptBlock]$ExecuteCallback) {
     Return $MenuItem
 }
 
-function Test-MenuWithClassOptions() {
-    $Opts = @(
+function Get-TestMenuItems() {
+    Return @(
         $(New-MenuItem -DisplayName "Say Hello" -ExecuteCallback { Write-Host "Hello!" }),
         $(New-MenuItem -DisplayName "Say Bye!" -ExecuteCallback { Write-Host "Bye!" })
     )
+}
+
+function Test-MenuWithClassOptions() {
+    $Opts = Get-TestMenuItems
 
     $Chosen = Show-Menu -MenuItems $Opts
     Write-Host "You chose: $Chosen"
