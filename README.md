@@ -10,6 +10,8 @@ Very basic example.
 Show-Menu @("option 1", "option 2", "option 3")
 ```
 
+![Basic example](./docs/basic-example.gif)
+
 ## Custom formatting
 
 Custom formatting of menu items and multi-selection:
@@ -17,6 +19,8 @@ Custom formatting of menu items and multi-selection:
 ```powershell
 Show-Menu -MenuItems $(Get-NetAdapter) -MultiSelect -MenuItemFormatter { $Args | Select -Exp Name }
 ```
+
+![Classes as options (complex example)](./docs/classes-as-options.gif)
 
 ## Custom options
 
@@ -51,6 +55,8 @@ $Chosen = Show-Menu -MenuItems $Opts
 
 This will show the menu items like you expect.
 
+![Custom formatters and multiselect](./docs/custom-formatter.gif)
+
 ## Separators
 
 ```
@@ -58,6 +64,8 @@ Show-Menu @("Option A", "Option B", $(Get-MenuSeparator), "Quit")
 ```
 
 Separators are unselectable items used for visual distinction in the menu.
+
+![Separator support](./docs/separator-support.gif)
 
 # Installation
 
