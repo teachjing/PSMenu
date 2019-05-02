@@ -112,7 +112,9 @@
             # IconUri = ''
 
             # ReleaseNotes of this module
-            # ReleaseNotes = ''
+            ReleaseNotes = '
+Added comment-based documentation.
+'
 
         } # End of PSData hashtable
 

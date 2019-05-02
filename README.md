@@ -61,6 +61,12 @@ Install-Module PSMenu
 - Navigation with `up/down/page-up/page-down/home/end` keys
 - Longer list scroll within window
 - Esc key quits the menu (`$null` returned)
+- Extensively documented
+
+# Documentation
+
+For details, check out the comment-based help in [the source code](./PSMenu/Public/Show-Menu.ps1),
+or use `Get-Help Show-Menu` from the command-line. See also [`Get-Help`](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/get-help?view=powershell-5.1).
 
 # Contributing
 
