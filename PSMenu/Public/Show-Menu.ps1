@@ -27,6 +27,10 @@ The items are converted to a string for display by the MenuItemFormatter paramet
 does by default a ".ToString()" of the underlying object. It is best for this string 
 to fit on a single line.
 
+The array of menu items may also contain unselectable separators, which can be used
+to visually distinct menu items. You can call Get-MenuSeparator to get a separator object,
+and add that to the menu item array.
+
 .PARAMETER  ReturnIndex
 Instead of returning the object(s) that has/have been chosen, return the index/indices
 of the object(s) that have been chosen.
@@ -68,6 +72,10 @@ Show-Menu @("option 1", "option 2", "option 3")
 
 Show-Menu -MenuItems $(Get-NetAdapter) -MenuItemFormatter { $Args | Select -Exp Name }
 
+.EXAMPLE 
+
+Show-Menu @("Option A", "Option B", $(Get-MenuSeparator), "Quit")
+
 #>
 function Show-Menu {
     [CmdletBinding()]
@@ -80,9 +88,13 @@ function Show-Menu {
     )
 
     Test-HostSupported
+    Test-MenuItemArray -MenuItems $MenuItems
 
+    # Current pressed virtual key code
     $VKeyCode = 0
-    $Position = 0
+
+    # Initialize valid position
+    $Position = Get-WrappedPosition $MenuItems -Position 0 -PositionOffset 1
 
     $CurrentSelection = @()
     $CursorPosition = [System.Console]::CursorTop

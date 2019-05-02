@@ -2,32 +2,53 @@ function Get-PositionWithVKey([Array]$MenuItems, [int]$Position, $VKeyCode) {
     $MinPosition = 0
     $MaxPosition = $MenuItems.Count - 1
     $WindowHeight = Get-ConsoleHeight
+    
+    Set-Variable -Name NewPosition -Option AllScope -Value $Position
+
+    <#
+    .SYNOPSIS
+
+    Updates the position until we aren't on a separator
+    #>
+    function Reset-InvalidPosition([Parameter(Mandatory)][int] $PositionOffset) {
+        $NewPosition = Get-WrappedPosition $MenuItems $NewPosition $PositionOffset
+    }
 
     If (Test-KeyUp $VKeyCode) { 
-        $Position--
+        $NewPosition--
+
+        Reset-InvalidPosition -PositionOffset -1
     }
 
     If (Test-KeyDown $VKeyCode) {
-        $Position++
+        $NewPosition++
+
+        Reset-InvalidPosition -PositionOffset 1
     }
 
     If (Test-KeyPageDown $VKeyCode) {
-        $Position = [Math]::Min($MaxPosition, $Position + $WindowHeight)
+        $NewPosition = [Math]::Min($MaxPosition, $NewPosition + $WindowHeight)
+
+        Reset-InvalidPosition -PositionOffset -1
     }
 
     If (Test-KeyEnd $VKeyCode) {
-        $Position = $MenuItems.Count - 1
+        $NewPosition = $MenuItems.Count - 1
+
+        Reset-InvalidPosition -PositionOffset 1
     }
 
     IF (Test-KeyPageUp $VKeyCode) {
-        $Position = [Math]::Max($MinPosition, $Position - $WindowHeight)
+        $NewPosition = [Math]::Max($MinPosition, $NewPosition - $WindowHeight)
+
+        Reset-InvalidPosition -PositionOffset -1
     }
 
     IF (Test-KeyHome $VKeyCode) {
-        $Position = $MinPosition
+        $NewPosition = $MinPosition
+
+        Reset-InvalidPosition -PositionOffset -1
     }
 
-    $Position = Get-WrappedPosition $MenuItems $Position
-
-    Return $Position
+    Return $NewPosition
 }

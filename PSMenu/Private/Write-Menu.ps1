@@ -28,7 +28,8 @@ function Write-Menu {
             Continue
         }
 
-        $MenuItemStr = & $MenuItemFormatter $($MenuItems[$CurrentIndex])
+        $RenderMenuItem = $MenuItems[$CurrentIndex]
+        $MenuItemStr = if (Test-MenuSeparator $RenderMenuItem) { $RenderMenuItem } else { & $MenuItemFormatter $RenderMenuItem }
         if (!$MenuItemStr) {
             Throw "'MenuItemFormatter' returned an empty string for item #$CurrentIndex"
         }

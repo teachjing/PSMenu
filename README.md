@@ -2,17 +2,23 @@
 
 Simple module to generate interactive console menus (like yeoman)
 
-# Examples:
+# Examples
+
+Very basic example.
 
 ```powershell
 Show-Menu @("option 1", "option 2", "option 3")
 ```
 
-Custom formatting of menu items:
+## Custom formatting
+
+Custom formatting of menu items and multi-selection:
 
 ```powershell
-Show-Menu -MenuItems $(Get-NetAdapter) -MenuItemFormatter { $Args | Select -Exp Name }
+Show-Menu -MenuItems $(Get-NetAdapter) -MultiSelect -MenuItemFormatter { $Args | Select -Exp Name }
 ```
+
+## Custom options
 
 You can also use custom options (enriched options). A more complicated example:
 
@@ -45,6 +51,14 @@ $Chosen = Show-Menu -MenuItems $Opts
 
 This will show the menu items like you expect.
 
+## Separators
+
+```
+Show-Menu @("Option A", "Option B", $(Get-MenuSeparator), "Quit")
+```
+
+Separators are unselectable items used for visual distinction in the menu.
+
 # Installation
 
 You can install it from the PowerShellGallery using PowerShellGet
@@ -60,6 +74,7 @@ Install-Module PSMenu
 - Multi-selection support (using `-MultiSelect` switch), use `spacebar` to select items
 - Navigation with `up/down/page-up/page-down/home/end` keys
 - Longer list scroll within window
+- Support for separators
 - Esc key quits the menu (`$null` returned)
 - Extensively documented
 

@@ -77,6 +77,11 @@ function Get-TestMenuItemsByCount($Count) {
     }
 }
 
+function Test-MenuWithSeparator() {
+    $MenuItems = @("Option A", "Option B", $(Get-MenuSeparator), "Quit")
+    Show-Menu $MenuItems
+}
+
 function Test-MenuWithClassOptions() {
     $Opts = Get-TestMenuItems
 

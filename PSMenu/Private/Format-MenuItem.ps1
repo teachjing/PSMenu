@@ -3,14 +3,21 @@ function Format-MenuItem(
     [Switch] $MultiSelect, 
     [Parameter(Mandatory)][bool] $IsItemSelected, 
     [Parameter(Mandatory)][bool] $IsItemFocused) {
-    $SelectionPrefix = ''
-    if ($MultiSelect) {
-        $SelectionPrefix = if ($IsItemSelected) { '[x] ' } else { '[ ] ' }
+
+    $SelectionPrefix = '    '
+    $FocusPrefix = '  '
+    $ItemText = ' -------------------------- '
+
+    if ($(Test-MenuSeparator $MenuItem) -ne $true) {
+        if ($MultiSelect) {
+            $SelectionPrefix = if ($IsItemSelected) { '[x] ' } else { '[ ] ' }
+        }
+
+        $FocusPrefix = if ($IsItemFocused) { '> ' } else { '  ' }
+        $ItemText = $MenuItem.ToString()
     }
 
     $WindowWidth = (Get-Host).UI.RawUI.WindowSize.Width
-    $ItemText = $MenuItem.ToString()
-    $FocusPrefix = if ($IsItemFocused) { '> ' } else { '  ' }
 
     $Text = "{0}{1}{2}" -f $FocusPrefix, $SelectionPrefix, $ItemText
     $Text = $Text.PadRight($WindowWidth - ($Text.Length + 2), ' ')
