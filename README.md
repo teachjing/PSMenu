@@ -59,7 +59,7 @@ This will show the menu items like you expect.
 
 ## Separators
 
-```
+```powershell
 Show-Menu @("Option A", "Option B", $(Get-MenuSeparator), "Quit")
 ```
 
