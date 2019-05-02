@@ -11,7 +11,7 @@ Show-Menu @("option 1", "option 2", "option 3")
 Custom formatting of menu items:
 
 ```powershell
-Show-Menu -MenuItems $(Get-NetAdapter) -MenuItemFormatter { Param($M) $M.Name }
+Show-Menu -MenuItems $(Get-NetAdapter) -MenuItemFormatter { $Args | Select -Exp Name }
 ```
 
 You can also use custom options (enriched options). A more complicated example:
