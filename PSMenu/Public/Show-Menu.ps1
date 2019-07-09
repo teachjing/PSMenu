@@ -103,14 +103,15 @@ function Show-Menu {
         [System.Console]::CursorVisible = $False # Prevents cursor flickering
 
         # Body
-        $WriteMenu = { 
-            Write-Menu -MenuItems $MenuItems `
+        $WriteMenu = {
+            ([ref]$MenuHeight).Value = Write-Menu -MenuItems $MenuItems `
                 -MenuPosition $Position `
                 -MultiSelect:$MultiSelect `
                 -CurrentSelection:$CurrentSelection `
                 -ItemFocusColor $ItemFocusColor `
                 -MenuItemFormatter $MenuItemFormatter
         }
+        $MenuHeight = 0
 
         & $WriteMenu
         While ($True) {
@@ -132,7 +133,7 @@ function Show-Menu {
             $Position = Get-PositionWithVKey -MenuItems $MenuItems -Position $Position -VKeyCode $VKeyCode
 
             If (!$(Test-KeyEscape $VKeyCode)) {
-                [System.Console]::SetCursorPosition(0, $CursorPosition)
+                [System.Console]::SetCursorPosition(0, [Console]::CursorTop - $MenuHeight)
                 & $WriteMenu
             }
         }
