@@ -20,8 +20,10 @@ function Format-MenuItem(
     $WindowWidth = (Get-Host).UI.RawUI.WindowSize.Width
 
     $Text = "{0}{1}{2}" -f $FocusPrefix, $SelectionPrefix, $ItemText
-    $Text = $Text.PadRight($WindowWidth - ($Text.Length + 2), ' ')
-
+    if ($WindowWidth - ($Text.Length + 2) > 0) {
+        $Text = $Text.PadRight($WindowWidth - ($Text.Length + 2), ' ')
+    }
+    
     Return $Text
 }
 
