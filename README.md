@@ -20,7 +20,7 @@ Custom formatting of menu items and multi-selection:
 Show-Menu -MenuItems $(Get-NetAdapter) -MultiSelect -MenuItemFormatter { $Args | Select -Exp Name }
 ```
 
-![Classes as options (complex example)](./docs/classes-as-options.gif)
+![Classes as options (complex example)](./docs/custom-formatter.gif)
 
 ## Custom options
 
@@ -55,7 +55,7 @@ $Chosen = Show-Menu -MenuItems $Opts
 
 This will show the menu items like you expect.
 
-![Custom formatters and multiselect](./docs/custom-formatter.gif)
+![Custom formatters and multiselect](./docs/classes-as-options.gif)
 
 ## Separators
 
