@@ -52,6 +52,9 @@ If you control the objects that you pass in MenuItems, then you want to probably
 override the ToString() method. If you don't control the objects, then this parameter
 is very useful.
 
+.PARAMETER InitialSelection
+Set initial selections if multi-select mode. This is an array of indecies.
+
 .INPUTS
 
 None. You cannot pipe objects to Show-Menu.
@@ -84,7 +87,8 @@ function Show-Menu {
         [Switch]$ReturnIndex, 
         [Switch]$MultiSelect, 
         [ConsoleColor] $ItemFocusColor = [ConsoleColor]::Green,
-        [ScriptBlock] $MenuItemFormatter = { Param($M) Format-MenuItemDefault $M }
+        [ScriptBlock] $MenuItemFormatter = { Param($M) Format-MenuItemDefault $M },
+        [Array] $InitialSelection
     )
 
     Test-HostSupported
@@ -96,7 +100,7 @@ function Show-Menu {
     # Initialize valid position
     $Position = Get-WrappedPosition $MenuItems -Position 0 -PositionOffset 1
 
-    $CurrentSelection = @()
+    $CurrentSelection = $InitialSelection
     $CursorPosition = [System.Console]::CursorTop
     
     try {
