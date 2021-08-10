@@ -12,7 +12,7 @@
     RootModule        = 'PSMenu.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.1.1'
+    ModuleVersion     = '0.1.2'
 
     # ID used to uniquely identify this module
     GUID              = '652b2326-2d29-4e86-8149-03828d75503e'
