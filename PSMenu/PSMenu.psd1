@@ -12,7 +12,7 @@
     RootModule        = 'PSMenu.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.1.2'
+    ModuleVersion     = '0.1.3'
 
     # ID used to uniquely identify this module
     GUID              = '652b2326-2d29-4e86-8149-03828d75503e'
@@ -24,7 +24,7 @@
     CompanyName       = 'Damsteen.nl'
 
     # Copyright statement for this module
-    Copyright         = '(c) 2018 Damsteen.nl'
+    Copyright         = '(c) Damsteen.nl'
 
     # Description of the functionality provided by this module
     Description       = 'Powershell module to generate interactive console menu.
