@@ -88,7 +88,7 @@ function Show-Menu {
         [Switch]$MultiSelect, 
         [ConsoleColor] $ItemFocusColor = [ConsoleColor]::Green,
         [ScriptBlock] $MenuItemFormatter = { Param($M) Format-MenuItemDefault $M },
-        [Array] $InitialSelection
+        [Array] $InitialSelection = @()
     )
 
     Test-HostSupported
