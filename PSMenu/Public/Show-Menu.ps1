@@ -148,7 +148,9 @@ function Show-Menu {
 
     if ($ReturnIndex -eq $false -and $null -ne $Position) {
         if ($MultiSelect) {
-            Return $MenuItems[$CurrentSelection]
+            if ($null -ne $CurrentSelection) {
+                Return $MenuItems[$CurrentSelection]
+            }
         }
         else {
             Return $MenuItems[$Position]
