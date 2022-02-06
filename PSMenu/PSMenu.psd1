@@ -12,7 +12,7 @@
     RootModule        = 'PSMenu.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.1.3'
+    ModuleVersion     = '0.1.4'
 
     # ID used to uniquely identify this module
     GUID              = '652b2326-2d29-4e86-8149-03828d75503e'
@@ -113,7 +113,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-Added comment-based documentation.
+Fix error when nothing is selected in multi-select mode returning an index (thanks @howlettt)
 '
 
         } # End of PSData hashtable
