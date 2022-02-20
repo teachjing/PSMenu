@@ -85,6 +85,7 @@ Install-Module PSMenu
 - Support for separators
 - Esc key quits the menu (`$null` returned)
 - Extensively documented
+- Perform actions while the menu is displayed (using `-Callback`)
 
 # Documentation
 
