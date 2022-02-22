@@ -56,7 +56,7 @@ is very useful.
 Set initial selections if multi-select mode. This is an array of indecies.
 
 .PARAMETER Callback
-A function/scriptblock which is called every 100 milliseconds while the menu is shown
+A function/scriptblock which is called every 10 milliseconds while the menu is shown
 
 .INPUTS
 
@@ -92,7 +92,7 @@ function Show-Menu {
         [ConsoleColor] $ItemFocusColor = [ConsoleColor]::Green,
         [ScriptBlock] $MenuItemFormatter = { Param($M) Format-MenuItemDefault $M },
         [Array] $InitialSelection = @(),
-        [ScriptBlock] $Callback
+        [ScriptBlock] $Callback = $null
     )
 
     Test-HostSupported
@@ -152,7 +152,7 @@ function Show-Menu {
                 & $Callback
             }
             
-            Start-Sleep -Milliseconds 100
+            Start-Sleep -Milliseconds 10
         }
     }
     finally {
