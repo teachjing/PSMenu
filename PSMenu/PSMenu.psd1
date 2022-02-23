@@ -12,7 +12,7 @@
     RootModule        = 'PSMenu.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.1.4'
+    ModuleVersion     = '0.1.6'
 
     # ID used to uniquely identify this module
     GUID              = '652b2326-2d29-4e86-8149-03828d75503e'
@@ -34,6 +34,7 @@
     - Paging
     - Objects
     - Custom rendering
+    - Rendering callback
     
     Check for examples on how to use it on Github!'
 
@@ -113,7 +114,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-Fix error when nothing is selected in multi-select mode returning an index (thanks @howlettt)
+Add callback parameter to allow custom rendering (thanks @howlettt)
 '
 
         } # End of PSData hashtable
