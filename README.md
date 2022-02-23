@@ -84,6 +84,8 @@ Show-Menu @("Option A", "Option B") -Callback {
 }
 ```
 
+![Callback example](./docs/callback.gif)
+
 # Installation
 
 You can install it from the PowerShellGallery using PowerShellGet
