@@ -67,6 +67,23 @@ Separators are unselectable items used for visual distinction in the menu.
 
 ![Separator support](./docs/separator-support.gif)
 
+## Callback
+
+The Callback option can be used to perform actions while the menu is displayed.
+Note: always save & restore the cursor position like in the following example if the host output is changed in the callback.
+
+```powershell
+Clear-Host
+Write-Host "Current time: $(Get-Date)"
+Write-Host ""
+Show-Menu @("Option A", "Option B") -Callback {
+    $lastTop = [Console]::CursorTop
+    [System.Console]::SetCursorPosition(0, 0)
+    Write-Host "Current time: $(Get-Date)"
+    [System.Console]::SetCursorPosition(0, $lastTop)
+}
+```
+
 # Installation
 
 You can install it from the PowerShellGallery using PowerShellGet
