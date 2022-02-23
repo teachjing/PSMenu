@@ -55,6 +55,9 @@ is very useful.
 .PARAMETER InitialSelection
 Set initial selections if multi-select mode. This is an array of indecies.
 
+.PARAMETER Callback
+A function/scriptblock which is called every 10 milliseconds while the menu is shown
+
 .INPUTS
 
 None. You cannot pipe objects to Show-Menu.
@@ -88,7 +91,8 @@ function Show-Menu {
         [Switch]$MultiSelect, 
         [ConsoleColor] $ItemFocusColor = [ConsoleColor]::Green,
         [ScriptBlock] $MenuItemFormatter = { Param($M) Format-MenuItemDefault $M },
-        [Array] $InitialSelection = @()
+        [Array] $InitialSelection = @(),
+        [ScriptBlock] $Callback = $null
     )
 
     Test-HostSupported
@@ -127,8 +131,11 @@ function Show-Menu {
                 Break
             }
 
-            $CurrentPress = Read-VKey
-            $VKeyCode = $CurrentPress.VirtualKeyCode
+            $VKeyCode = $null
+            if ([Console]::KeyAvailable) {
+                $CurrentPress = Read-VKey
+                $VKeyCode = $CurrentPress.VirtualKeyCode
+            }
 
             If (Test-KeySpace $VKeyCode) {
                 $CurrentSelection = Toggle-Selection $Position $CurrentSelection
@@ -140,6 +147,12 @@ function Show-Menu {
                 [System.Console]::SetCursorPosition(0, [Console]::CursorTop - $MenuHeight)
                 & $WriteMenu
             }
+
+            if ($Callback) {
+                & $Callback
+            }
+            
+            Start-Sleep -Milliseconds 10
         }
     }
     finally {
