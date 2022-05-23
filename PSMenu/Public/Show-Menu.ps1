@@ -131,8 +131,9 @@ function Show-Menu {
                 Break
             }
 
+            # Read key when callback and available key, or no callback at all
             $VKeyCode = $null
-            if ([Console]::KeyAvailable) {
+            if ($null -eq $Callback -or [Console]::KeyAvailable) {
                 $CurrentPress = Read-VKey
                 $VKeyCode = $CurrentPress.VirtualKeyCode
             }
@@ -150,9 +151,9 @@ function Show-Menu {
 
             if ($Callback) {
                 & $Callback
+
+                Start-Sleep -Milliseconds 10
             }
-            
-            Start-Sleep -Milliseconds 10
         }
     }
     finally {
