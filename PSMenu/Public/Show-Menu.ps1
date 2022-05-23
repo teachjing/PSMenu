@@ -145,7 +145,7 @@ function Show-Menu {
             $Position = Get-PositionWithVKey -MenuItems $MenuItems -Position $Position -VKeyCode $VKeyCode
 
             If (!$(Test-KeyEscape $VKeyCode)) {
-                [System.Console]::SetCursorPosition(0, [Console]::CursorTop - $MenuHeight)
+                [System.Console]::SetCursorPosition(0, [Math]::Max(0, [Console]::CursorTop - $MenuHeight))
                 & $WriteMenu
             }
 
