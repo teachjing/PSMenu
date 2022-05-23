@@ -105,7 +105,6 @@ function Show-Menu {
     $Position = Get-WrappedPosition $MenuItems -Position 0 -PositionOffset 1
 
     $CurrentSelection = $InitialSelection
-    $CursorPosition = [System.Console]::CursorTop
     
     try {
         [System.Console]::CursorVisible = $False # Prevents cursor flickering
