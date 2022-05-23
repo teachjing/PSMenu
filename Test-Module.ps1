@@ -106,6 +106,18 @@ function Test-MenuWithCustomFormatter() {
     Show-Menu -MenuItems $(Get-NetAdapter) -MenuItemFormatter { Param($M) $M.Name }
 }
 
+function Test-MenuWithCallback() {
+    Clear-Host
+    Write-Host "Current time: $(Get-Date)"
+    Write-Host ""
+    Show-Menu @("Option A", "Option B") -Callback {
+        $lastTop = [Console]::CursorTop
+        [System.Console]::SetCursorPosition(0, 0)
+        Write-Host "Current time: $(Get-Date)"
+        [System.Console]::SetCursorPosition(0, $lastTop)
+    }
+}
+
 if ($SmokeTest) {
     Write-Host "Test-MenuWithClassOptions" -ForegroundColor Cyan
     Test-MenuWithClassOptions
