@@ -12,7 +12,7 @@
     RootModule        = 'PSMenu.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.1.6'
+    ModuleVersion     = '0.1.7'
 
     # ID used to uniquely identify this module
     GUID              = '652b2326-2d29-4e86-8149-03828d75503e'
@@ -114,7 +114,9 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-Add callback parameter to allow custom rendering (thanks @howlettt)
+Increase input performance on long menus
+Fix crash on menu longer than screen when console is resized
+Optimize rendering:  re-render menu in loop only when callback is given
 '
 
         } # End of PSData hashtable
