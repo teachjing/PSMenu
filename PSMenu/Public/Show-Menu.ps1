@@ -122,34 +122,44 @@ function Show-Menu {
         $MenuHeight = 0
 
         & $WriteMenu
+        $NeedRendering = $false
+        
         While ($True) {
             If (Test-KeyEscape $VKeyCode) {
                 Return $null
             }
 
-            if (Test-KeyEnter $VKeyCode) {
+            If (Test-KeyEnter $VKeyCode) {
                 Break
             }
 
-            # Read key when callback and available key, or no callback at all
-            $VKeyCode = $null
-            if ($null -eq $Callback -or [Console]::KeyAvailable) {
-                $CurrentPress = Read-VKey
-                $VKeyCode = $CurrentPress.VirtualKeyCode
-            }
+            # While there are 
+            Do {
+                # Read key when callback and available key, or no callback at all
+                $VKeyCode = $null
+                if ($null -eq $Callback -or [Console]::KeyAvailable) {
+                    $CurrentPress = Read-VKey
+                    $VKeyCode = $CurrentPress.VirtualKeyCode
+                }
 
-            If (Test-KeySpace $VKeyCode) {
-                $CurrentSelection = Toggle-Selection $Position $CurrentSelection
-            }
+                If (Test-KeySpace $VKeyCode) {
+                    $CurrentSelection = Toggle-Selection $Position $CurrentSelection
+                }
 
-            $Position = Get-PositionWithVKey -MenuItems $MenuItems -Position $Position -VKeyCode $VKeyCode
+                $Position = Get-PositionWithVKey -MenuItems $MenuItems -Position $Position -VKeyCode $VKeyCode
 
-            If (!$(Test-KeyEscape $VKeyCode)) {
-                [System.Console]::SetCursorPosition(0, [Math]::Max(0, [Console]::CursorTop - $MenuHeight))
+                If (!$(Test-KeyEscape $VKeyCode)) {
+                    [System.Console]::SetCursorPosition(0, [Math]::Max(0, [Console]::CursorTop - $MenuHeight))
+                    $NeedRendering = $true
+                }
+            } While ($null -eq $Callback -and [Console]::KeyAvailable);
+
+            If ($NeedRendering) {
                 & $WriteMenu
+                $NeedRendering = $false
             }
 
-            if ($Callback) {
+            If ($Callback) {
                 & $Callback
 
                 Start-Sleep -Milliseconds 10
