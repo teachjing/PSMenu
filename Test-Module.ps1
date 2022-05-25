@@ -22,10 +22,13 @@ if ($NoNewShell -eq $false) {
         $PsArgs += @("-EncCmd", $EncCmd)
     }
 
-    
+    $Cmd = "powershell"
+    if (!$(Get-Command $Cmd -ErrorAction SilentlyContinue)) {
+        $Cmd = "pwsh"
+    }
 
-    Write-Host "powershell $PsArgs"
-    & powershell $PsArgs
+    Write-Host "$Cmd $PsArgs"
+    & $Cmd $PsArgs
     Exit $LASTEXITCODE
 }
 
