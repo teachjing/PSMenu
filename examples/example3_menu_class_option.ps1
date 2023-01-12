@@ -1,4 +1,4 @@
-Import-module "$($PSScriptRoot)\PSMenu"
+Import-module "$($PSScriptRoot)\..\PSMenu" -Force
 
 class MyMenuOption {
     [String]$DisplayName

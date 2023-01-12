@@ -40,7 +40,7 @@ function Write-Menu {
         $IsItemSelected = $CurrentSelection -contains $CurrentIndex
         $IsItemFocused = $CurrentIndex -eq $MenuPosition
 
-        [Console]::SetCursorPosition($lastCoord.x, $lastCoord.y+$CurrentIndex)
+        [Console]::CursorLeft = $lastCoord.x
         $DisplayText = Format-MenuItem -MenuItem $MenuItemStr -MultiSelect:$MultiSelect -IsItemSelected:$IsItemSelected -IsItemFocused:$IsItemFocused
         Write-MenuItem -MenuItem $DisplayText -IsFocused:$IsItemFocused -FocusColor $ItemFocusColor
         $MenuHeight += [Math]::Max([Math]::Ceiling($DisplayText.Length / $ConsoleWidth), 1)

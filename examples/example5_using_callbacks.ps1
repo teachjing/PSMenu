@@ -1,3 +1,5 @@
+Import-module "$($PSScriptRoot)\..\PSMenu" -Force
+
 Clear-Host
 Write-Host "Current time: $(Get-Date)"
 Write-Host ""

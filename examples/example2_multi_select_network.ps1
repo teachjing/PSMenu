@@ -1,4 +1,4 @@
-Import-module "$($PSScriptRoot)\PSMenu"
+Import-module "$($PSScriptRoot)\..\PSMenu" -Force
 
 [console]::Clear()
 #[console]::SetCursorPosition(10,10)
