@@ -20,6 +20,7 @@ function Write-Menu {
         [Switch] $MultiSelect
     )
     
+    $lastCoord = @{x = ([console]::CursorLeft); y = ([console]::CursorTop)}
     $CurrentIndex = Get-CalculatedPageIndexNumber -MenuItems $MenuItems -MenuPosition $MenuPosition -TopIndex
     $MenuItemCount = Get-CalculatedPageIndexNumber -MenuItems $MenuItems -MenuPosition $MenuPosition -ItemCount
     $ConsoleWidth = [Console]::BufferWidth
@@ -29,7 +30,7 @@ function Write-Menu {
         if ($null -eq $MenuItems[$CurrentIndex]) {
             Continue
         }
-
+        
         $RenderMenuItem = $MenuItems[$CurrentIndex]
         $MenuItemStr = if (Test-MenuSeparator $RenderMenuItem) { $RenderMenuItem } else { & $MenuItemFormatter $RenderMenuItem }
         if (!$MenuItemStr) {
@@ -39,6 +40,7 @@ function Write-Menu {
         $IsItemSelected = $CurrentSelection -contains $CurrentIndex
         $IsItemFocused = $CurrentIndex -eq $MenuPosition
 
+        [Console]::SetCursorPosition($lastCoord.x, $lastCoord.y+$CurrentIndex)
         $DisplayText = Format-MenuItem -MenuItem $MenuItemStr -MultiSelect:$MultiSelect -IsItemSelected:$IsItemSelected -IsItemFocused:$IsItemFocused
         Write-MenuItem -MenuItem $DisplayText -IsFocused:$IsItemFocused -FocusColor $ItemFocusColor
         $MenuHeight += [Math]::Max([Math]::Ceiling($DisplayText.Length / $ConsoleWidth), 1)

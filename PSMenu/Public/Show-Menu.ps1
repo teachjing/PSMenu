@@ -95,6 +95,8 @@ function Show-Menu {
         [ScriptBlock] $Callback = $null
     )
 
+    $lastCoord = @{x = ([console]::CursorLeft); y = ([console]::CursorTop)}
+
     Test-HostSupported
     Test-MenuItemArray -MenuItems $MenuItems
 
@@ -108,6 +110,7 @@ function Show-Menu {
     
     try {
         [System.Console]::CursorVisible = $False # Prevents cursor flickering
+
 
         # Body
         $WriteMenu = {
@@ -148,7 +151,7 @@ function Show-Menu {
                 $Position = Get-PositionWithVKey -MenuItems $MenuItems -Position $Position -VKeyCode $VKeyCode
 
                 If (!$(Test-KeyEscape $VKeyCode)) {
-                    [System.Console]::SetCursorPosition(0, [Math]::Max(0, [Console]::CursorTop - $MenuHeight))
+                    [System.Console]::SetCursorPosition($lastCoord.x, [Math]::Max(0, [Console]::CursorTop - $MenuHeight))
                     $NeedRendering = $true
                 }
             } While ($null -eq $Callback -and [Console]::KeyAvailable);
