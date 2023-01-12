@@ -1,3 +1,7 @@
+# What I added 
+- ability to output menu anywhere the initial console cursor is placed. 
+- examples folder with examples you can run
+
 # PSMenu
 
 Simple module to generate interactive console menus (like yeoman)
